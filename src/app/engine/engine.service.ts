@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
@@ -6,10 +8,11 @@ export class EngineService implements OnDestroy {
   private canvas: HTMLCanvasElement;
   private renderer: THREE.WebGLRenderer;
   private camera: THREE.PerspectiveCamera;
+  private controls: TransformControls;
   private scene: THREE.Scene;
-  private light: THREE.AmbientLight;
-
-  private cube: THREE.Mesh;
+  private light: THREE.DirectionalLight;
+  private loader: OBJLoader;
+  private model: THREE.Object3D;
 
   private frameId: number = null;
 
@@ -19,6 +22,14 @@ export class EngineService implements OnDestroy {
     if (this.frameId != null) {
       cancelAnimationFrame(this.frameId);
     }
+  }
+
+  public loaderCallback( obj: THREE.Object3D ): void {
+    this.model.add( obj );
+    this.model.name = 'Comet 67P/Churyumov-Gerasimenko';
+
+    this.scene.add( this.model );
+    this.controls.attach( this.model );
   }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -41,16 +52,20 @@ export class EngineService implements OnDestroy {
     this.camera.position.z = 5;
     this.scene.add(this.camera);
 
+    // set user controls
+    this.controls = new TransformControls( this.camera, this.canvas );
+    this.controls.mode = 'rotate';
+    this.scene.add( this.controls );
+
     // soft white light
-    this.light = new THREE.AmbientLight( 0x404040 );
+    this.light = new THREE.DirectionalLight( 0xffffff, 0.75 );
     this.light.position.z = 10;
     this.scene.add(this.light);
 
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    this.cube = new THREE.Mesh( geometry, material );
-    this.scene.add(this.cube);
-
+    // load the model
+    this.model = new THREE.Object3D();
+    this.loader = new OBJLoader();
+    this.loader.load('assets/67P.obj', ( obj: THREE.Object3D ) => this.loaderCallback(obj));
   }
 
   public animate(): void {
@@ -76,8 +91,6 @@ export class EngineService implements OnDestroy {
       this.render();
     });
 
-    this.cube.rotation.x += 0.01;
-    this.cube.rotation.y += 0.01;
     this.renderer.render(this.scene, this.camera);
   }
 
