@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
@@ -8,7 +8,7 @@ export class EngineService implements OnDestroy {
   private canvas: HTMLCanvasElement;
   private renderer: THREE.WebGLRenderer;
   private camera: THREE.PerspectiveCamera;
-  private controls: TransformControls;
+  private controls: OrbitControls;
   private scene: THREE.Scene;
   private light: THREE.DirectionalLight;
   private loader: OBJLoader;
@@ -29,7 +29,6 @@ export class EngineService implements OnDestroy {
     this.model.name = 'Comet 67P/Churyumov-Gerasimenko';
 
     this.scene.add( this.model );
-    this.controls.attach( this.model );
   }
 
   public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -53,17 +52,26 @@ export class EngineService implements OnDestroy {
     this.scene.add(this.camera);
 
     // set user controls
-    this.controls = new TransformControls( this.camera, this.canvas );
-    this.controls.mode = 'rotate';
-    this.scene.add( this.controls );
+    this.controls = new OrbitControls( this.camera, this.canvas );
+    this.controls.enableZoom = true;
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.25;
 
     // soft white light
-    this.light = new THREE.DirectionalLight( 0xffffff, 0.75 );
+    this.light = new THREE.DirectionalLight( 0xffffff, 0.50 );
     this.light.position.z = 10;
     this.scene.add( this.light );
 
-    this.light = new THREE.DirectionalLight( 0xffffff, 0.75 );
+    this.light = new THREE.DirectionalLight( 0xffffff, 0.25 );
     this.light.position.z = -10;
+    this.scene.add( this.light );
+
+    this.light = new THREE.DirectionalLight( 0xffffff, 0.50 );
+    this.light.position.y = 10;
+    this.scene.add( this.light );
+
+    this.light = new THREE.DirectionalLight( 0xffffff, 0.25 );
+    this.light.position.y = -10;
     this.scene.add( this.light );
 
     // load the model
