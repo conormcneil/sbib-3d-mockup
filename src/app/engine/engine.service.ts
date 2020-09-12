@@ -13,6 +13,8 @@ export class EngineService implements OnDestroy {
     private light: THREE.DirectionalLight;
     private loader: OBJLoader;
     private model: THREE.Object3D;
+    private raycaster: THREE.Raycaster;
+    private mousePosition: THREE.Vector2;
 
     private frameId: number = null;
 
@@ -26,7 +28,7 @@ export class EngineService implements OnDestroy {
 
     public loaderCallback(obj: THREE.Object3D): void {
         this.model.add(obj);
-        this.model.name = 'Comet 67P/Churyumov-Gerasimenko';
+        this.model.name = '67P';
 
         this.scene.add(this.model);
     }
@@ -80,12 +82,30 @@ export class EngineService implements OnDestroy {
         this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
     }
 
+    public onClick( event: any ): THREE.Intersection {
+        event.preventDefault();
+
+        this.mousePosition = new THREE.Vector2();
+        this.raycaster = new THREE.Raycaster();
+
+        this.mousePosition.x =  ( ( event.clientX - this.canvas.clientLeft ) / this.canvas.width  ) * 2 - 1;
+        this.mousePosition.y = -( ( event.clientY - this.canvas.clientTop  ) / this.canvas.height ) * 2 + 1;
+        
+        this.raycaster.setFromCamera( this.mousePosition, this.camera );
+        let intersection = this.raycaster.intersectObjects( this.scene.getObjectByName('67P').children, true )[0];
+
+        console.log(intersection.point);
+        
+        return intersection;
+    }
+
     public animate(): void {
         // We have to run this outside angular zones,
         // because it could trigger heavy changeDetection cycles.
         this.ngZone.runOutsideAngular(() => {
             if (document.readyState !== 'loading') {
                 this.render();
+                this.renderer.domElement.addEventListener( 'click', ( event: any ) => this.onClick( event ) );
             } else {
                 window.addEventListener('DOMContentLoaded', () => {
                     this.render();
