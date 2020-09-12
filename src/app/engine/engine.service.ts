@@ -60,7 +60,11 @@ export class EngineService implements OnDestroy {
     // soft white light
     this.light = new THREE.DirectionalLight( 0xffffff, 0.75 );
     this.light.position.z = 10;
-    this.scene.add(this.light);
+    this.scene.add( this.light );
+
+    this.light = new THREE.DirectionalLight( 0xffffff, 0.75 );
+    this.light.position.z = -10;
+    this.scene.add( this.light );
 
     // load the model
     this.model = new THREE.Object3D();
