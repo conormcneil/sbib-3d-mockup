@@ -9,22 +9,22 @@ import { UiSidebarRightComponent } from './ui/ui-sidebar-right/ui-sidebar-right.
 import { UiComponent } from './ui/ui.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    EngineComponent,
-    UiComponent,
-    UiInfobarBottomComponent,
-    UiInfobarTopComponent,
-    UiSidebarLeftComponent,
-    UiSidebarRightComponent
-  ],
-  imports: [
-    BrowserModule
-  ],
-  providers: [
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+    declarations: [
+        AppComponent,
+        EngineComponent,
+        UiComponent,
+        UiInfobarBottomComponent,
+        UiInfobarTopComponent,
+        UiSidebarLeftComponent,
+        UiSidebarRightComponent
+    ],
+    imports: [
+        BrowserModule
+    ],
+    providers: [
+    ],
+    bootstrap: [
+        AppComponent
+    ]
 })
 export class AppModule { }
