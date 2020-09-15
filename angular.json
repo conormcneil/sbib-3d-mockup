@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ng-three-template": {
+    "sbib-3d-mockup": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -72,18 +72,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng-three-template:build"
+            "browserTarget": "sbib-3d-mockup:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ng-three-template:build:production"
+              "browserTarget": "sbib-3d-mockup:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng-three-template:build"
+            "browserTarget": "sbib-3d-mockup:build"
           }
         },
         "test": {
@@ -117,7 +117,7 @@
         }
       }
     },
-    "ng-three-template-e2e": {
+    "sbib-3d-mockup-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -126,7 +126,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "ng-three-template:serve"
+            "devServerTarget": "sbib-3d-mockup:serve"
           },
           "configurations": {
             "production": {
@@ -146,7 +146,7 @@
       }
     }
   },
-  "defaultProject": "ng-three-template",
+  "defaultProject": "sbib-3d-mockup",
   "cli": {
     "analytics": "58212eb1-d08c-4e42-a8dd-b0fc0d26b8d1"
   }

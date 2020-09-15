@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('ng-three-template App', () => {
+describe('sbib-3d-mockup App', () => {
   let page: AppPage;
 
   beforeEach(() => {
