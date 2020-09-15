@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
+import { Coordinate } from 'coordinate-systems';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
@@ -15,6 +16,8 @@ export class EngineService implements OnDestroy {
     private model: THREE.Object3D;
     private raycaster: THREE.Raycaster;
     private mousePosition: THREE.Vector2;
+    private cartesianCoordinate: Coordinate;
+    private sphericalCoordinate: Coordinate;
 
     private frameId: number = null;
 
@@ -82,7 +85,7 @@ export class EngineService implements OnDestroy {
         this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
     }
 
-    public onClick( event: any ): THREE.Intersection {
+    public onClick( event: MouseEvent ): void {
         event.preventDefault();
 
         this.mousePosition = new THREE.Vector2();
@@ -92,11 +95,16 @@ export class EngineService implements OnDestroy {
         this.mousePosition.y = -( ( event.clientY - this.canvas.clientTop  ) / this.canvas.height ) * 2 + 1;
         
         this.raycaster.setFromCamera( this.mousePosition, this.camera );
-        let intersection = this.raycaster.intersectObjects( this.scene.getObjectByName('67P').children, true )[0];
+        try {
+            let intersection = this.raycaster.intersectObjects( this.scene.getObjectByName('67P').children, true )[0].point;
 
-        console.log(intersection.point);
-        
-        return intersection;
+            this.cartesianCoordinate = Coordinate.cartesian( [ intersection.x, intersection.y, intersection.z ] );
+            this.sphericalCoordinate = Coordinate.spherical(this.cartesianCoordinate.spherical());
+            
+            console.log(this.sphericalCoordinate);
+        } catch (err) {
+            // if click does not intersect object, do nothing
+        }
     }
 
     public animate(): void {
