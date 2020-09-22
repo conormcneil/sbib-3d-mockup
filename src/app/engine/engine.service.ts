@@ -3,6 +3,7 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { Coordinate } from 'coordinate-systems';
+import { FootprintService } from '../footprint.service';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
@@ -18,6 +19,8 @@ export class EngineService implements OnDestroy {
     private mousePosition: THREE.Vector2;
     private cartesianCoordinate: Coordinate;
     private sphericalCoordinate: Coordinate;
+    private footprintService: FootprintService;
+    private footprint: Array<any>;
 
     private frameId: number = null;
 
@@ -34,6 +37,14 @@ export class EngineService implements OnDestroy {
         this.model.name = '67P';
 
         this.scene.add(this.model);
+        this.drawFootprint(); // TODO placeholder; this will be called somewhere else. (WHERE?)
+    }
+
+    public drawFootprint(): void {
+        // TODO
+        // DRAW THE MF'N FOOTPRINTTTTT
+        this.footprintService = new FootprintService( 'n20150812t135504' );
+        console.log(this.footprintService.footprint);
     }
 
     public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
