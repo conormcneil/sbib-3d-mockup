@@ -17,10 +17,9 @@ export class EngineService implements OnDestroy {
     private model: THREE.Object3D;
     private raycaster: THREE.Raycaster;
     private mousePosition: THREE.Vector2;
-    private cartesianCoordinate: Coordinate;
-    private sphericalCoordinate: Coordinate;
-    private footprintService: FootprintService;
+    private coordinate: Coordinate;
     private footprint: Array<any>;
+    private points: Array<THREE.Vector3>;
 
     private frameId: number = null;
 
@@ -41,10 +40,40 @@ export class EngineService implements OnDestroy {
     }
 
     public drawFootprint(): void {
-        // TODO
-        // DRAW THE MF'N FOOTPRINTTTTT
-        this.footprintService = new FootprintService( 'n20150812t135504' );
-        console.log(this.footprintService.footprint);
+        const origin = new THREE.Vector3( 0, 0, 0 );
+        // DRAW AXES
+        const materialX = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+        const materialY = new THREE.LineBasicMaterial( { color: 0x00ff00 } );
+        const materialZ = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+        
+        const geometryX = new THREE.BufferGeometry().setFromPoints( [new THREE.Vector3( -10, 0, 0 ), new THREE.Vector3( 10, 0, 0 )] );
+        const geometryY = new THREE.BufferGeometry().setFromPoints( [new THREE.Vector3( 0, -10, 0 ), new THREE.Vector3( 0, 10, 0 )] );
+        const geometryZ = new THREE.BufferGeometry().setFromPoints( [new THREE.Vector3( 0, 0, -10 ), new THREE.Vector3( 0, 0, 10 )] );
+
+        const axisX = new THREE.Line( geometryX, materialX );
+        const axisY = new THREE.Line( geometryY, materialY );
+        const axisZ = new THREE.Line( geometryZ, materialZ );
+
+        this.scene.add( axisX ); // RED
+        this.scene.add( axisY ); // GREEN
+        this.scene.add( axisZ ); // BLUE
+
+        // DRAW FOOTPRINT
+        this.footprint = new FootprintService( 'n20150812t135504' ).footprint;
+
+        this.footprint.map(coordinate => {
+            this.points = [origin];
+            
+            const point = new THREE.Vector3( coordinate[0], coordinate[1], coordinate[2] ); // swap axes...
+            this.points.push(point);
+            
+            const geometryFootprint = new THREE.BufferGeometry().setFromPoints( this.points );
+            const materialFootprint = new THREE.LineBasicMaterial( { color: 0xf0f0f0 } );
+            const line = new THREE.Line( geometryFootprint, materialFootprint );
+            this.scene.add( line );
+    
+            this.render();
+        });
     }
 
     public createScene(canvas: ElementRef<HTMLCanvasElement>): void {
@@ -64,7 +93,11 @@ export class EngineService implements OnDestroy {
         this.camera = new THREE.PerspectiveCamera(
             75, window.innerWidth / window.innerHeight, 0.1, 1000
         );
-        this.camera.position.z = 5;
+
+        this.camera.position.x = 10;
+        this.camera.position.y = 10;
+        this.camera.position.z = 10;
+        
         this.scene.add(this.camera);
 
         // set user controls
@@ -93,7 +126,11 @@ export class EngineService implements OnDestroy {
         // load the model
         this.model = new THREE.Object3D();
         this.loader = new OBJLoader();
-        this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
+        // TEST OBJECTS
+        // 67P
+        // this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
+        // Ceres
+        this.loader.load('assets/ceres.reduced.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
     }
 
     public onClick( event: MouseEvent ): void {
@@ -109,10 +146,9 @@ export class EngineService implements OnDestroy {
         try {
             let intersection = this.raycaster.intersectObjects( this.scene.getObjectByName('67P').children, true )[0].point;
 
-            this.cartesianCoordinate = Coordinate.cartesian( [ intersection.x, intersection.y, intersection.z ] );
-            this.sphericalCoordinate = Coordinate.spherical(this.cartesianCoordinate.spherical());
+            this.coordinate = Coordinate.cartesian( [ intersection.x, intersection.y, intersection.z ] );
             
-            console.log(this.sphericalCoordinate);
+            console.log(this.coordinate);
         } catch (err) {
             // if click does not intersect object, do nothing
         }
