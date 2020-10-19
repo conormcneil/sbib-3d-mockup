@@ -23,7 +23,9 @@ export class EngineService implements OnDestroy {
 
     private frameId: number = null;
 
-    public constructor(private ngZone: NgZone) { }
+    public constructor(private ngZone: NgZone) {
+        THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1);
+    }
 
     public ngOnDestroy(): void {
         if (this.frameId != null) {
