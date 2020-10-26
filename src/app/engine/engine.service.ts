@@ -24,7 +24,7 @@ export class EngineService implements OnDestroy {
     private frameId: number = null;
 
     public constructor(private ngZone: NgZone) {
-        THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1);
+        // THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1);
     }
 
     public ngOnDestroy(): void {
@@ -44,21 +44,48 @@ export class EngineService implements OnDestroy {
     public drawFootprint(): void {
         const origin = new THREE.Vector3( 0, 0, 0 );
         // DRAW AXES
-        const materialX = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-        const materialY = new THREE.LineBasicMaterial( { color: 0x00ff00 } );
-        const materialZ = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+        const materialX = {
+            solid: new THREE.LineBasicMaterial( { color: 0xff0000 } ),
+            dashed: new THREE.LineDashedMaterial( { linewidth: 1, scale: 1, dashSize: 3, gapSize: 1, color: 0xff9999 } )
+        }
+        const materialY = {
+            solid: new THREE.LineBasicMaterial( { color: 0x00ff00 } ),
+            dashed: new THREE.LineDashedMaterial( { linewidth: 1, scale: 1, dashSize: 3, gapSize: 1, color: 0x99ff99 } )
+        }
+        const materialZ = {
+            solid: new THREE.LineBasicMaterial( { color: 0x0000ff } ),
+            dashed: new THREE.LineDashedMaterial( { linewidth: 1, scale: 1, dashSize: 3, gapSize: 1, color: 0x9999ff } )
+        }
         
-        const geometryX = new THREE.BufferGeometry().setFromPoints( [new THREE.Vector3( -10, 0, 0 ), new THREE.Vector3( 10, 0, 0 )] );
-        const geometryY = new THREE.BufferGeometry().setFromPoints( [new THREE.Vector3( 0, -10, 0 ), new THREE.Vector3( 0, 10, 0 )] );
-        const geometryZ = new THREE.BufferGeometry().setFromPoints( [new THREE.Vector3( 0, 0, -10 ), new THREE.Vector3( 0, 0, 10 )] );
+        const geometryX = {
+            solid: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 10, 0, 0 )] ),
+            dashed: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( -10, 0, 0)])
+        }
+        const geometryY = {
+            solid: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, 10, 0 )] ),
+            dashed: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, -10, 0)])
+        }
+        const geometryZ = {
+            solid: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, 0, 10 )] ),
+            dashed: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, 0, -10)])
+        }
 
-        const axisX = new THREE.Line( geometryX, materialX );
-        const axisY = new THREE.Line( geometryY, materialY );
-        const axisZ = new THREE.Line( geometryZ, materialZ );
+        const positiveAxisX = new THREE.Line( geometryX.solid, materialX.solid );
+        const negativeAxisX = new THREE.Line( geometryX.dashed, materialX.dashed );
+        const positiveAxisY = new THREE.Line( geometryY.solid, materialY.solid );
+        const negativeAxisY = new THREE.Line( geometryY.dashed, materialY.dashed );
+        const positiveAxisZ = new THREE.Line( geometryZ.solid, materialZ.solid );
+        const negativeAxisZ = new THREE.Line( geometryZ.dashed, materialZ.dashed );
 
-        this.scene.add( axisX ); // RED
-        this.scene.add( axisY ); // GREEN
-        this.scene.add( axisZ ); // BLUE
+        // RED
+        this.scene.add( positiveAxisX );
+        this.scene.add( negativeAxisX );
+        // GREEN
+        this.scene.add( positiveAxisY );
+        this.scene.add( negativeAxisY );
+        // BLUE
+        this.scene.add( positiveAxisZ );
+        this.scene.add( negativeAxisZ );
 
         // DRAW FOOTPRINT
         this.footprint = new FootprintService( 'n20150812t135504' ).footprint;
@@ -128,11 +155,7 @@ export class EngineService implements OnDestroy {
         // load the model
         this.model = new THREE.Object3D();
         this.loader = new OBJLoader();
-        // TEST OBJECTS
-        // 67P
-        // this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
-        // Ceres
-        this.loader.load('assets/ceres.reduced.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
+        this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
     }
 
     public onClick( event: MouseEvent ): void {
