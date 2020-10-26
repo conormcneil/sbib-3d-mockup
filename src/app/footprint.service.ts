@@ -10,8 +10,15 @@ export class FootprintService {
   public cartesian3: Array<any>;
   public polar: Array<any>;
   public spherical: Array<any>;
+  public api: any;
 
   constructor(private imageName: String) {
+    // Ceres
+    this.api = {
+      '589270800': ' 209.5 -14.1, 209.6 -15.1, 209.7 -16.0, 209.7 -17.0, 209.7 -17.2, 205.7 -11.3, 202.2 -7.1, 202.2 -5.7, 202.3 -4.4, 202.3 -3.1, 202.3 -2.8, 206.3 -8.6, 209.5 -14.1',
+      '589368910': ' 207.8 -14.5, 207.9 -15.5, 208.0 -16.5, 208.1 -17.5, 208.1 -17.7, 204.2 -11.9, 200.6 -7.8, 200.6 -6.4, 200.6 -5.1, 200.6 -3.7, 200.6 -3.5, 204.7 -9.2, 207.8 -14.5',
+      '0050444_16007170633F': ' 258.9 68.0, 262.5 66.7, 265.7 65.3, 267.1 64.6, 264.0 63.3, 261.1 62.0, 259.8 61.3, 256.8 62.5, 253.5 63.7, 251.7 64.2, 254.3 65.8, 257.3 67.3, 258.9 68.0'
+    };
     this.imageName = imageName;
     this.getFootprint();
   }
@@ -22,7 +29,7 @@ export class FootprintService {
     
     // TEST FOOTPRINT STRINGS
     // Ceres
-    this.string = ' 209.5 -14.1, 209.6 -15.1, 209.7 -16.0, 209.7 -17.0, 209.7 -17.2, 205.7 -11.3, 202.2 -7.1, 202.2 -5.7, 202.3 -4.4, 202.3 -3.1, 202.3 -2.8, 206.3 -8.6, 209.5 -14.1';
+    this.string = this.api[this.imageName];
 
     // once string is loaded,
     // convert to spherical coordinates and store output as `footprint` (default)

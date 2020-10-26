@@ -25,6 +25,7 @@ export class EngineService implements OnDestroy {
     private frameId: number = null;
 
     public constructor(private ngZone: NgZone) {
+        THREE.Object3D.DefaultUp.set( 0, 0, 1 );
         this.origin = new THREE.Vector3( 0, 0, 0 );
     }
 
@@ -91,7 +92,7 @@ export class EngineService implements OnDestroy {
 
     public drawFootprint(): void {
         // this.footprint = new FootprintService( 'n20150812t135504' ).footprint; // 67P
-        this.footprint = new FootprintService( '589270800' ).footprint; // Ceres
+        this.footprint = new FootprintService( '0050444_16007170633F' ).footprint; // Ceres
 
         function degreesToRadians(degrees) {
             return degrees * (Math.PI/180);
