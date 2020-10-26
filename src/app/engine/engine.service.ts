@@ -90,12 +90,29 @@ export class EngineService implements OnDestroy {
     }
 
     public drawFootprint(): void {
-        this.footprint = new FootprintService( 'n20150812t135504' ).footprint;
+        // this.footprint = new FootprintService( 'n20150812t135504' ).footprint; // 67P
+        this.footprint = new FootprintService( '589270800' ).footprint; // Ceres
+
+        function degreesToRadians(degrees) {
+            return degrees * (Math.PI/180);
+        }
 
         this.footprint.map(coordinate => {
             this.points = [this.origin];
+
+            let radius = coordinate[0];
+            let theta = coordinate[1]; // degrees
+            let phi = coordinate[2]; // degrees
             
-            const point = new THREE.Vector3( coordinate[0], coordinate[1], coordinate[2] ); // swap axes...
+            let lat = degreesToRadians(90 - theta);
+            let lon = degreesToRadians(phi);
+            
+            let x = radius * Math.cos(lat) * Math.cos(lon);
+            let y = radius * Math.cos(lat) * Math.sin(lon);
+            let z = radius * Math.sin(lat);
+
+            const point = new THREE.Vector3( x, y, z );
+            
             this.points.push(point);
             
             const geometryFootprint = new THREE.BufferGeometry().setFromPoints( this.points );
