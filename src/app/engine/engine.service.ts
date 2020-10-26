@@ -20,11 +20,12 @@ export class EngineService implements OnDestroy {
     private coordinate: Coordinate;
     private footprint: Array<any>;
     private points: Array<THREE.Vector3>;
+    private origin: THREE.Vector3;
 
     private frameId: number = null;
 
     public constructor(private ngZone: NgZone) {
-        // THREE.Object3D.DefaultUp = new THREE.Vector3(0,0,1);
+        this.origin = new THREE.Vector3( 0, 0, 0 );
     }
 
     public ngOnDestroy(): void {
@@ -38,11 +39,11 @@ export class EngineService implements OnDestroy {
         this.model.name = '67P';
 
         this.scene.add(this.model);
+        this.drawAxes();
         this.drawFootprint(); // TODO placeholder; this will be called somewhere else. (WHERE?)
     }
 
-    public drawFootprint(): void {
-        const origin = new THREE.Vector3( 0, 0, 0 );
+    public drawAxes(): void {
         // DRAW AXES
         const materialX = {
             solid: new THREE.LineBasicMaterial( { color: 0xff0000 } ),
@@ -58,16 +59,16 @@ export class EngineService implements OnDestroy {
         }
         
         const geometryX = {
-            solid: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 10, 0, 0 )] ),
-            dashed: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( -10, 0, 0)])
+            solid: new THREE.BufferGeometry().setFromPoints( [ this.origin, new THREE.Vector3( 10, 0, 0 )] ),
+            dashed: new THREE.BufferGeometry().setFromPoints( [ this.origin, new THREE.Vector3( -10, 0, 0)])
         }
         const geometryY = {
-            solid: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, 10, 0 )] ),
-            dashed: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, -10, 0)])
+            solid: new THREE.BufferGeometry().setFromPoints( [ this.origin, new THREE.Vector3( 0, 10, 0 )] ),
+            dashed: new THREE.BufferGeometry().setFromPoints( [ this.origin, new THREE.Vector3( 0, -10, 0)])
         }
         const geometryZ = {
-            solid: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, 0, 10 )] ),
-            dashed: new THREE.BufferGeometry().setFromPoints( [ origin, new THREE.Vector3( 0, 0, -10)])
+            solid: new THREE.BufferGeometry().setFromPoints( [ this.origin, new THREE.Vector3( 0, 0, 10 )] ),
+            dashed: new THREE.BufferGeometry().setFromPoints( [ this.origin, new THREE.Vector3( 0, 0, -10)])
         }
 
         const positiveAxisX = new THREE.Line( geometryX.solid, materialX.solid );
@@ -86,12 +87,13 @@ export class EngineService implements OnDestroy {
         // BLUE
         this.scene.add( positiveAxisZ );
         this.scene.add( negativeAxisZ );
+    }
 
-        // DRAW FOOTPRINT
+    public drawFootprint(): void {
         this.footprint = new FootprintService( 'n20150812t135504' ).footprint;
 
         this.footprint.map(coordinate => {
-            this.points = [origin];
+            this.points = [this.origin];
             
             const point = new THREE.Vector3( coordinate[0], coordinate[1], coordinate[2] ); // swap axes...
             this.points.push(point);
@@ -155,7 +157,7 @@ export class EngineService implements OnDestroy {
         // load the model
         this.model = new THREE.Object3D();
         this.loader = new OBJLoader();
-        this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
+        this.loader.load('assets/ceres.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
     }
 
     public onClick( event: MouseEvent ): void {
