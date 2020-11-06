@@ -196,6 +196,7 @@ export class EngineService implements OnDestroy {
             console.log(this.coordinate);
         } catch (err) {
             // if click does not intersect object, do nothing
+            console.error(err);
         }
     }
 
