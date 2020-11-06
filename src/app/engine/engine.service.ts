@@ -175,7 +175,7 @@ export class EngineService implements OnDestroy {
         // load the model
         this.model = new THREE.Object3D();
         this.loader = new OBJLoader();
-        this.loader.load('assets/ceres.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
+        this.loader.load('assets/67P.obj', (obj: THREE.Object3D) => this.loaderCallback(obj));
     }
 
     public onClick( event: MouseEvent ): void {
