@@ -13,13 +13,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { ImageViewerComponent } from './image-viewer/image-viewer.component';
+import { ImagePickerTableComponent } from './image-picker-table/image-picker-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
     AppComponent,
     EngineComponent,
     MenuSideNavComponent,
-    ImageViewerComponent
+    ImageViewerComponent,
+    ImagePickerTableComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +36,10 @@ import { ImageViewerComponent } from './image-viewer/image-viewer.component';
     MatSidenavModule,
     MatIconModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [
   ],
