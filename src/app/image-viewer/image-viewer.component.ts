@@ -25,8 +25,7 @@ export class ImageViewerComponent implements OnInit {
   }
 
   previewImagePath(): string {
-    if (this.currentImage.name == 'Default Image Name') return null;
-    else return this.imagePath() + this.currentImage.name + '.png';
+    return this.imagePath() + this.currentImage.name + '.png';
   }
 
   previewImageAltText(): string {
