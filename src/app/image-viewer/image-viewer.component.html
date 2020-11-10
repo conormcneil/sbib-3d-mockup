@@ -2,11 +2,11 @@
     <mat-card-header>
         <mat-card-title>{{ currentImage.name }}</mat-card-title>
     </mat-card-header>
-    <img mat-card-image [src]="previewImagePath()" [alt]="previewImageAltText()">
     <mat-card-actions>
         <mat-button-toggle-group name="previewTypeGroup" value="frame">
             <button mat-button (click)="setPreviewType('frame')" value="frame">Frame Projected</button>
             <button mat-button (click)="setPreviewType('maps') " value="maps">Map Projected</button>
         </mat-button-toggle-group>
     </mat-card-actions>
+    <img mat-card-image [src]="previewImagePath()" [alt]="previewImageAltText()">
 </mat-card>

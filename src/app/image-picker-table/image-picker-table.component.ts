@@ -16,26 +16,39 @@ export class ImagePickerTableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable) table: MatTable<ImagePickerTableItem>;
   dataSource: ImagePickerTableDataSource;
   private image: any;
-  currentImage: string;
+  currentImage: {
+    id: number;
+    target: string;
+    name: string;
+    url: string;
+  };
   
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name'];
   
     constructor(private imageHandler: ImageHandlerService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.dataSource = new ImagePickerTableDataSource();
-    this.imageHandler.currentImage.subscribe(currentImage => this.currentImage = currentImage);
+    this.imageHandler.currentImage.subscribe(currentImage => {
+      console.log(currentImage);
+      
+      this.currentImage = currentImage;
+    });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
   }
 
-  selectImage(selectedImage: object) {
+  selectImage(selectedImage: object): void {
     this.image = selectedImage;
     this.imageHandler.newSelectedImage(this.image);
+  }
+
+  selected(id: number): string {
+    return id === this.currentImage.id ? 'selected' : null;
   }
 }

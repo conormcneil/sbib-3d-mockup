@@ -8,4 +8,12 @@
 
 [mat-row] {
   cursor: pointer;
+
+  :hover {
+    background: #f0f0f0;
+  }
+
+  &.selected {
+    background: #c0c0c0;
+  }
 }
