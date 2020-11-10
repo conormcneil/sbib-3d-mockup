@@ -12,10 +12,8 @@ export interface ImagePickerTableItem {
 }
 // TODO: replace this with real data from your application
 const EXAMPLE_DATA: ImagePickerTableItem[] = [
-  {id: 1, target: 'Ceres', name: '589270800'},
-  {id: 2, target: 'Ceres', name: '589368910'},
-  {id: 3, target: 'Ceres', name: '0050444_16007170633F'},
-  // {id: 4, target: '67P', name: 'n20160710t095836552', url: 'https://pdssbn.astro.umd.edu/holdings/ro-c-osinac-3-ext3-67pchuryumov-m31-v3.0/data/img/n20160710t095836552id30f22.img'}
+  {id: 1, target: '67P', name: 'n20160710t095836552id30f22', url: 'https://pdssbn.astro.umd.edu/holdings/ro-c-osinac-3-ext3-67pchuryumov-m31-v3.0/data/img/n20160710t095836552id30f22.img'},
+  {id: 2, target: '67P', name: 'n20150812t135504593id30f71', url: ''}
 ];
 
 /**

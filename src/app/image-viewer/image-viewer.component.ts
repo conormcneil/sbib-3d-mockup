@@ -10,10 +10,31 @@ export class ImageViewerComponent implements OnInit {
   public currentImage: {
     name: string;
   };
+  public previewType: string;
 
-  constructor(private imageHandler: ImageHandlerService) { }
+  constructor(private imageHandler: ImageHandlerService) {
+    this.previewType = 'frame';
+  }
 
   ngOnInit(): void {
     this.imageHandler.currentImage.subscribe(currentImage => this.currentImage = currentImage);
+  }
+
+  imagePath(): string {
+    return `../../assets/data/${this.previewType}/png/`;
+  }
+
+  previewImagePath(): string {
+    if (this.currentImage.name == 'Default Image Name') return null;
+    else return this.imagePath() + this.currentImage.name + '.png';
+  }
+
+  previewImageAltText(): string {
+    const type = this.previewType == 'frame' ? 'Frame' : 'Map';
+    return `${type} projected image`;
+  }
+
+  setPreviewType(previewType: string): void {
+    this.previewType = previewType;
   }
 }

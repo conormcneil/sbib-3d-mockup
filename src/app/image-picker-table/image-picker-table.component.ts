@@ -34,7 +34,7 @@ export class ImagePickerTableComponent implements AfterViewInit, OnInit {
     this.table.dataSource = this.dataSource;
   }
 
-  selectImage(selectedImage) {
+  selectImage(selectedImage: object) {
     this.image = selectedImage;
     this.imageHandler.newSelectedImage(this.image);
   }

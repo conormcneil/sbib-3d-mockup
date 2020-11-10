@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ImageHandlerService {
-  private image: BehaviorSubject<object> = new BehaviorSubject({name: 'Default Image Name'});
+  private image: BehaviorSubject<object> = new BehaviorSubject({name: null});
   public currentImage: Observable<any> = this.image.asObservable();
 
   constructor() { }
