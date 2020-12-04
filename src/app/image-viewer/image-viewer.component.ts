@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageHandlerService } from '../image-handler.service';
+import Image from '../modules/Image';
 
 @Component({
   selector: 'app-image-viewer',
@@ -7,9 +8,7 @@ import { ImageHandlerService } from '../image-handler.service';
   styleUrls: ['./image-viewer.component.scss']
 })
 export class ImageViewerComponent implements OnInit {
-  public currentImage: {
-    name: string;
-  };
+  public currentImage: Image;
   public previewType: string;
 
   constructor(private imageHandler: ImageHandlerService) {

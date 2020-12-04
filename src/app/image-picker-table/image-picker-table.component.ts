@@ -2,7 +2,8 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { ImagePickerTableDataSource, ImagePickerTableItem } from './image-picker-table-datasource';
+import { ImagePickerTableDataSource } from './image-picker-table-datasource';
+import Image from '../modules/Image';
 import { ImageHandlerService } from '../image-handler.service';
 
 @Component({
@@ -13,7 +14,7 @@ import { ImageHandlerService } from '../image-handler.service';
 export class ImagePickerTableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<ImagePickerTableItem>;
+  @ViewChild(MatTable) table: MatTable<Image>;
   dataSource: ImagePickerTableDataSource;
   private image: any;
   currentImage: {
@@ -26,15 +27,11 @@ export class ImagePickerTableComponent implements AfterViewInit, OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name'];
   
-    constructor(private imageHandler: ImageHandlerService) { }
+  constructor( private imageHandler: ImageHandlerService ) {}
 
   ngOnInit(): void {
     this.dataSource = new ImagePickerTableDataSource();
-    this.imageHandler.currentImage.subscribe(currentImage => {
-      console.log(currentImage);
-      
-      this.currentImage = currentImage;
-    });
+    this.imageHandler.currentImage.subscribe(currentImage => this.currentImage = currentImage);
   }
 
   ngAfterViewInit(): void {

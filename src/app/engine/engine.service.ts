@@ -4,6 +4,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { Coordinate } from 'coordinate-systems';
 import { FootprintService } from '../footprint.service';
+import { ImageHandlerService } from '../image-handler.service';
+import Image from '../modules/Image';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {
@@ -18,15 +20,25 @@ export class EngineService implements OnDestroy {
     private raycaster: THREE.Raycaster;
     private mousePosition: THREE.Vector2;
     private coordinate: Coordinate;
+    private footprintService: FootprintService;
     private footprint: Array<any>;
     private points: Array<THREE.Vector3>;
     private origin: THREE.Vector3;
+    public currentImage: Image;
 
     private frameId: number = null;
 
-    public constructor(private ngZone: NgZone) {
-        THREE.Object3D.DefaultUp.set( 0, 0, 1 );
+    public constructor(private ngZone: NgZone, private imageHandler: ImageHandlerService) {
+        // THREE.Object3D.DefaultUp.set( 0, 0, 1 );
         this.origin = new THREE.Vector3( 0, 0, 0 );
+    }
+
+    public ngOnInit(): void {
+        this.imageHandler.currentImage.subscribe(currentImage => {
+            console.log(currentImage);
+            
+            this.currentImage = currentImage;
+        });
     }
 
     public ngOnDestroy(): void {
@@ -41,7 +53,7 @@ export class EngineService implements OnDestroy {
 
         this.scene.add(this.model);
         this.drawAxes();
-        this.drawFootprint(); // TODO placeholder; this will be called somewhere else. (WHERE?)
+        this.drawFootprint();
     }
 
     public drawAxes(): void {
@@ -91,8 +103,12 @@ export class EngineService implements OnDestroy {
     }
 
     public drawFootprint(): void {
-        // this.footprint = new FootprintService( 'n20150812t135504' ).footprint; // 67P
-        this.footprint = new FootprintService( '0050444_16007170633F' ).footprint; // Ceres
+        this.footprintService = new FootprintService(this.imageHandler);
+        this.footprintService.getFootprint();
+
+        this.footprint = this.footprintService.footprint;
+        console.log(this.footprint);
+        
 
         function degreesToRadians(degrees) {
             return degrees * (Math.PI/180);
@@ -196,7 +212,7 @@ export class EngineService implements OnDestroy {
             console.log(this.coordinate);
         } catch (err) {
             // if click does not intersect object, do nothing
-            console.error(err);
+            // console.error(err);
         }
     }
 
