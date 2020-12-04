@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { ImageHandlerService } from './image-handler.service';
+import Image from './modules/Image';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +13,9 @@ export class FootprintService {
   public polar: Array<any>;
   public spherical: Array<any>;
   public api: any;
+  public currentImage: Image;
 
-  constructor(private imageName: String) {
-    // Ceres
+  constructor(private imageHandler: ImageHandlerService) {
     this.api = {
       'Ceres': {
         '589270800': ' 209.5 -14.1, 209.6 -15.1, 209.7 -16.0, 209.7 -17.0, 209.7 -17.2, 205.7 -11.3, 202.2 -7.1, 202.2 -5.7, 202.3 -4.4, 202.3 -3.1, 202.3 -2.8, 206.3 -8.6, 209.5 -14.1',
@@ -25,20 +27,24 @@ export class FootprintService {
         'n20150812t135504593id30f71': ' 214.7 -3.6, 200.4 -17.7, 200.1 -58.9, 120.4 -88.7, 89.8 -70.7, 81.9 -45.4, 83.3 -14.4, 72.2 6.9, 18.3 -9.8, 16.1 6.5, 2.6 22.1, 0.0 23.3, 0.0 46.7, 0.0 70.2, 0.0 90.0, 360.0 90.0, 360.0 70.2, 360.0 46.7, 360.0 23.3, 341.2 31.9, 322.5 29.8, 304.8 15.3, 297.4 -1.1, 222.4 21.9, 215.4 5.4, 214.7 -3.6'
       }
     };
-    this.imageName = imageName;
-    this.getFootprint();
+  }
+  
+  ngOnInit(): void {
+    this.imageHandler.currentImage.subscribe(currentImage => {
+      this.currentImage = currentImage;
+      console.log(this.currentImage);
+    });
   }
 
   public getFootprint(): void { 
-    console.log(this.imageName);
+    console.log(this.currentImage.name);
     console.log('faking API call to backend to retrieve footprint string...');
     
     // TEST FOOTPRINT STRINGS
-    // Ceres
-    // this.string = this.api['589270800'];
     // 67P
-    this.string = this.api['67P']['n20160710t095836'];
-
+    const imageName = this.currentImage.name;
+    this.string = this.api['67P'][`${imageName}`];
+    
     // once string is loaded,
     // convert to spherical coordinates and store output as `footprint` (default)
     this.convert();
