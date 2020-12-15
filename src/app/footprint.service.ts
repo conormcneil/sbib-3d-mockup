@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ImageHandlerService } from './image-handler.service';
-import Image from './modules/Image';
+import Image from './models/Image';
 
 @Injectable({
   providedIn: 'root'
@@ -37,12 +37,12 @@ export class FootprintService {
   }
 
   public getFootprint(): void { 
-    console.log(this.currentImage.name);
+    console.log(this.currentImage.imageName);
     console.log('faking API call to backend to retrieve footprint string...');
     
     // TEST FOOTPRINT STRINGS
     // 67P
-    const imageName = this.currentImage.name;
+    const imageName = this.currentImage.imageName;
     this.string = this.api['67P'][`${imageName}`];
     
     // once string is loaded,

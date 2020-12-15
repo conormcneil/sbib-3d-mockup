@@ -5,7 +5,7 @@ import { Injectable, ElementRef, OnDestroy, NgZone } from '@angular/core';
 import { Coordinate } from 'coordinate-systems';
 import { FootprintService } from '../footprint.service';
 import { ImageHandlerService } from '../image-handler.service';
-import Image from '../modules/Image';
+import Image from '../models/Image';
 
 @Injectable({ providedIn: 'root' })
 export class EngineService implements OnDestroy {

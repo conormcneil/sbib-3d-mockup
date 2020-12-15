@@ -2,11 +2,9 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
-import Image from '../modules/Image';
-
-// TODO: replace this with real data from your application
-const EXAMPLE_DATA: Image[] = [];
+import { Observable, of as observableOf, merge, BehaviorSubject } from 'rxjs';
+import Image from '../models/Image';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * Data source for the ImagePickerTable view. This class should
@@ -14,12 +12,15 @@ const EXAMPLE_DATA: Image[] = [];
  * (including sorting, pagination, and filtering).
  */
 export class ImagePickerTableDataSource extends DataSource<Image> {
-  data: Image[] = EXAMPLE_DATA;
+  data: Image[] = [];
   paginator: MatPaginator;
   sort: MatSort;
+  subject: BehaviorSubject<Image[]> = new BehaviorSubject<Image[]>([]);
+  private loadingImages: boolean = false;
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
     super();
+    this.getAllImages();
   }
 
   /**
@@ -30,15 +31,35 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
   connect(): Observable<Image[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
-    const dataMutations = [
-      observableOf(this.data),
-      this.paginator.page,
-      this.sort.sortChange
-    ];
-
-    return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
-    }));
+    console.log('connecting...');
+    console.log(this.data);
+    if (this.data.length < 1) {
+      // this.loadingImages = true;
+      return this.getAllImages().then(response => {
+        this.data = response;
+        this.subject.next(this.data);
+        const dataMutations = [
+          observableOf(this.data),
+          this.paginator.page,
+          this.sort.sortChange
+        ];
+    
+        return merge(...dataMutations).pipe(map(() => {
+          return this.getPagedData(this.getSortedData([...this.data]));
+        }));
+      });
+    } else {
+      console.log('data already exists');
+      const dataMutations = [
+        observableOf(this.data),
+        this.paginator.page,
+        this.sort.sortChange
+      ];
+  
+      return merge(...dataMutations).pipe(map(() => {
+        return this.getPagedData(this.getSortedData([...this.data]));
+      }));
+    }
   }
 
   /**
@@ -68,11 +89,15 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
+        case 'name': return compare(a.imageName, b.imageName, isAsc);
         // case 'id': return compare(+a.id, +b.id, isAsc);
         default: return 0;
       }
     });
+  }
+
+  getAllImages(): Image[] {
+    return this.httpClient.get<Image[]>('http://localhost:9494/images/all/2').toPromise().then(response => response);
   }
 }
 

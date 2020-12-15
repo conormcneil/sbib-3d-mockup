@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageHandlerService } from '../image-handler.service';
-import Image from '../modules/Image';
+import Image from '../models/Image';
 
 @Component({
   selector: 'app-image-viewer',
@@ -24,7 +24,7 @@ export class ImageViewerComponent implements OnInit {
   }
 
   previewImagePath(): string {
-    return this.imagePath() + this.currentImage.name + '.png';
+    return this.imagePath() + this.currentImage.imageName + '.png';
   }
 
   previewImageAltText(): string {
