@@ -20,7 +20,7 @@ export class ImageViewerComponent implements OnInit {
   }
 
   imagePath(): string {
-    return `../../assets/data/${this.previewType}/png/`;
+    return `http://localhost:8000/${this.previewType}/png/`;
   }
 
   previewImagePath(): string {

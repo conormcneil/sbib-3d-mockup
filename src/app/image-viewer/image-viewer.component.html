@@ -1,12 +1,13 @@
-<mat-card class="image-viewer-card" *ngIf="currentImage.imageName">
-    <mat-card-header>
+<mat-card class="image-viewer-card">
+    <mat-card-title-group class="mat-card-title-group">
+        <mat-card-subtitle>{{ currentImage.imageName ? 'Image Name' : 'Select an Image' }}</mat-card-subtitle>
         <mat-card-title>{{ currentImage.imageName }}</mat-card-title>
-    </mat-card-header>
+    </mat-card-title-group>
+    <img mat-card-lg-image [src]="previewImagePath()" [alt]="previewImageAltText()" class="mat-card-image">
     <mat-card-actions>
         <mat-button-toggle-group name="previewTypeGroup" value="frame">
             <button mat-button (click)="setPreviewType('frame')" value="frame">Frame Projected</button>
             <button mat-button (click)="setPreviewType('maps') " value="maps">Map Projected</button>
         </mat-button-toggle-group>
     </mat-card-actions>
-    <img mat-card-image [src]="previewImagePath()" [alt]="previewImageAltText()">
 </mat-card>

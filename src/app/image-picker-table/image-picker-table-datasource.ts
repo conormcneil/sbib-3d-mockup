@@ -20,7 +20,6 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
 
   constructor(private httpClient: HttpClient) {
     super();
-    this.getAllImages();
   }
 
   /**
@@ -31,11 +30,8 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
   connect(): Observable<Image[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
-    console.log('connecting...');
-    console.log(this.data);
     if (this.data.length < 1) {
-      // this.loadingImages = true;
-      return this.getAllImages().then(response => {
+      this.getAllImages().then(response => {
         this.data = response;
         this.subject.next(this.data);
         const dataMutations = [
@@ -49,7 +45,6 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
         }));
       });
     } else {
-      console.log('data already exists');
       const dataMutations = [
         observableOf(this.data),
         this.paginator.page,
@@ -96,8 +91,8 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
     });
   }
 
-  getAllImages(): Image[] {
-    return this.httpClient.get<Image[]>('http://localhost:9494/images/all/2').toPromise().then(response => response);
+  getAllImages(): Promise<Image[]> {
+    return this.httpClient.get<Image[]>('http://localhost:9494/images/all/2').toPromise();
   }
 }
 

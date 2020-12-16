@@ -21,7 +21,7 @@ export class ImagePickerTableComponent implements AfterViewInit, OnInit {
   currentImage: Image;
   
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['imageName'];
+  displayedColumns = ['id', 'imageName'];
   
   constructor(
     private imageHandler: ImageHandlerService,
@@ -29,7 +29,6 @@ export class ImagePickerTableComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {    
     this.dataSource = new ImagePickerTableDataSource(this.httpClient);
-    console.log(this.dataSource);
     this.imageHandler.currentImage.subscribe(currentImage => this.currentImage = currentImage);
   }
 

@@ -1,9 +1,16 @@
+@import '../styles/variables';
+
 .full-width-table {
   width: 100%;
 }
 
 .image-picker-table {
-  margin: 1em 0;
+  position: absolute;
+  left: 0;
+  bottom: 50px;
+  height: $imagePickerTableHeight;
+  width: 100%;
+  overflow: scroll;
 }
 
 [mat-row] {

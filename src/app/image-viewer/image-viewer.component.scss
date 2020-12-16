@@ -1,4 +1,9 @@
-[mat-card-image] {
-    margin: 0 0.5em;
-    width: calc(100% - 1em);
+@import '../styles/variables';
+
+.image-viewer-card {
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    height: $imageViewerHeight;
+    z-index: 999;
 }

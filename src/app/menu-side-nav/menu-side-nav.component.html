@@ -1,22 +1,17 @@
+<mat-toolbar color="primary">
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    *ngIf="isHandset$ | async">
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+  <span>SBIB 3D</span>
+</mat-toolbar>
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav-content class="sidenav-content">
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>SBIB 3D</span>
-    </mat-toolbar>
-
-    <!-- Add Content Here -->
-    <div class="image-container">
-      <app-image-picker-table></app-image-picker-table>
-      <app-image-viewer></app-image-viewer>
-    </div>
+    <app-image-viewer></app-image-viewer>
+    <app-image-picker-table></app-image-picker-table>
     <!-- <app-engine></app-engine> -->
-    
   </mat-sidenav-content>
 </mat-sidenav-container>
