@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge, BehaviorSubject } from 'rxjs';
-import Image from '../models/Image';
+import SbibImage from '../models/SbibImage';
 import { HttpClient } from '@angular/common/http';
 
 /**
@@ -11,11 +11,11 @@ import { HttpClient } from '@angular/common/http';
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class ImagePickerTableDataSource extends DataSource<Image> {
-  data: Image[] = [];
+export class ImagePickerTableDataSource extends DataSource<SbibImage> {
+  data: SbibImage[] = [];
   paginator: MatPaginator;
   sort: MatSort;
-  subject: BehaviorSubject<Image[]> = new BehaviorSubject<Image[]>([]);
+  subject: BehaviorSubject<SbibImage[]> = new BehaviorSubject<SbibImage[]>([]);
   private loadingImages: boolean = false;
 
   constructor(private httpClient: HttpClient) {
@@ -27,7 +27,7 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<Image[]> {
+  connect(): Observable<SbibImage[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     if (this.data.length < 1) {
@@ -67,7 +67,7 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: Image[]) {
+  private getPagedData(data: SbibImage[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -76,7 +76,7 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: Image[]) {
+  private getSortedData(data: SbibImage[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -91,8 +91,8 @@ export class ImagePickerTableDataSource extends DataSource<Image> {
     });
   }
 
-  getAllImages(): Promise<Image[]> {
-    return this.httpClient.get<Image[]>('http://localhost:9494/images/all/2').toPromise();
+  getAllImages(): Promise<SbibImage[]> {
+    return this.httpClient.get<SbibImage[]>('http://localhost:9494/images/all/2').toPromise();
   }
 }
 

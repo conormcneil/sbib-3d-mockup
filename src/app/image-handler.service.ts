@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import Image from './models/Image';
+import SbibImage from './models/SbibImage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageHandlerService {
-  private image: BehaviorSubject<object> = new BehaviorSubject({name: null});
-  public currentImage: Observable<any> = this.image.asObservable();
+  private image: BehaviorSubject<any> = new BehaviorSubject({});
+  public currentImage: Observable<SbibImage> = this.image.asObservable();
 
-  private dataSubject: BehaviorSubject<object> = new BehaviorSubject([]);
+  private dataSubject: BehaviorSubject<[]> = new BehaviorSubject([]);
   public data: Observable<any> = this.dataSubject.asObservable();
 
   constructor() { }
 
   public newSelectedImage(selectedImage: any) {
+    console.log('get footprint');
+    
     this.image.next(selectedImage);
   };
 }

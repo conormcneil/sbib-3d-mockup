@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { ImagePickerTableDataSource } from './image-picker-table-datasource';
-import Image from '../models/Image';
+import SbibImage from '../models/SbibImage';
 import { ImageHandlerService } from '../image-handler.service';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,10 +15,10 @@ import { HttpClient } from '@angular/common/http';
 export class ImagePickerTableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<Image>;
+  @ViewChild(MatTable) table: MatTable<SbibImage>;
   dataSource: ImagePickerTableDataSource;
   private image: any;
-  currentImage: Image;
+  currentImage: SbibImage;
   
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'imageName'];

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ImageHandlerService } from './image-handler.service';
-import Image from './models/Image';
+import SbibImage from './models/SbibImage';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class FootprintService {
   public polar: Array<any>;
   public spherical: Array<any>;
   public api: any;
-  public currentImage: Image;
+  public currentImage: SbibImage;
 
   constructor(private imageHandler: ImageHandlerService) {
     this.api = {

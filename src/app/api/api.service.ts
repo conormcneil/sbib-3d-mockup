@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import Image from '../models/Image';
+import SbibImage from '../models/SbibImage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class ApiService {
   
   constructor(private http: HttpClient) { }
 
-  public getAllImages(): Observable<Image[]> {
-    return this.http.get<Image[]>(this.baseUrl + '/images/all/2');
+  public getAllImages(): Observable<SbibImage[]> {
+    return this.http.get<SbibImage[]>(this.baseUrl + '/images/all/2');
   }
 }
